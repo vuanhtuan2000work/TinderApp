@@ -21,20 +21,17 @@ const HomeScreen = () => {
             setLoading(true);
             if (user) {
                 try {
-                    // Lấy tất cả người dùng từ Firebase
                     const allUsersRef = firebase.app().database(DATABASE_URL).ref('/users');
                     const allUsersSnapshot = await allUsersRef.once('value');
                     const allUsersData = allUsersSnapshot.val();
-    
-                    // Lọc ra người dùng hiện tại
                     const filteredUsers = Object.keys(allUsersData)
-                        .filter(uid => uid !== user.uid) // Loại trừ user.uid
+                        .filter(uid => uid !== user.uid) 
                         .map(uid => ({
                             uid,
-                            ...allUsersData[uid].userInfor, // Gán thông tin người dùng
+                            ...allUsersData[uid].userInfor, 
                         }));
     
-                    setUsers(filteredUsers); // Cập nhật state với danh sách người dùng đã lọc
+                    setUsers(filteredUsers);
                 } catch (error) {
                     console.error('Error fetching users:', error);
                     Alert.alert('Lỗi', 'Có lỗi xảy ra khi lấy danh sách người dùng.');
