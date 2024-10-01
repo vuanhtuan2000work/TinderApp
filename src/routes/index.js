@@ -33,7 +33,7 @@ const Routes = () => {
     });
 
     return () => unsubscribe(); 
-  }, [setUser]);
+  }, [setUser, user]);
 
   if (loading) {
     return null; 

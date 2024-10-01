@@ -113,7 +113,7 @@ const AddPhotos = () => {
             await reference.update(newUserInfor);
             await AsyncStorage.setItem(`userPhotos_${userInfor.uid}`, JSON.stringify(imageUrls));
             setLoading(false)
-            navigation.navigate('WelcomeScreen'); 
+            navigation.navigate('TabBarRoute'); 
             await listFilesAndDirectories();
         } catch (error) {
             setLoading(false)

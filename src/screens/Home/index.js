@@ -15,54 +15,38 @@ const HomeScreen = () => {
     const [loading, setLoading] = useState(false);
     const [currentUserIndex, setCurrentUserIndex] = useState(0); 
 
+   
     useEffect(() => {
-        const fetchUserInfo = async () => {
+        const fetchUsers = async () => {
             setLoading(true);
             if (user) {
                 try {
-                    const userRef = firebase.app().database(DATABASE_URL).ref(`/users/${user.uid}/userInfor`);
-                    const userSnapshot = await userRef.once('value');
-                    const userData = userSnapshot.val();
-
-                    if (!userData || !userData.dateOfBirth || !userData.name || !userData.interests || !userData.photos) {
-                        navigation.navigate('AddInformationsRoute');
-                        return; 
-                    }
-
+                    // Lấy tất cả người dùng từ Firebase
                     const allUsersRef = firebase.app().database(DATABASE_URL).ref('/users');
                     const allUsersSnapshot = await allUsersRef.once('value');
                     const allUsersData = allUsersSnapshot.val();
-                    const targetGender = userData.targetGender;
+    
+                    // Lọc ra người dùng hiện tại
                     const filteredUsers = Object.keys(allUsersData)
-                        .filter(uid => uid !== user.uid) 
-                        .filter(uid => {
-                            const gender = allUsersData[uid].userInfor.gender; 
-                            if (targetGender === 'man') {
-                                return gender === 'man';
-                            } else if (targetGender === 'woman') {
-                                return gender === 'woman';
-                            } else if (targetGender === 'other') {
-                                return gender === 'man' || gender === 'woman'; 
-                            }
-                            return false;
-                        })
+                        .filter(uid => uid !== user.uid) // Loại trừ user.uid
                         .map(uid => ({
                             uid,
-                            ...allUsersData[uid].userInfor,
+                            ...allUsersData[uid].userInfor, // Gán thông tin người dùng
                         }));
-
-                    setUsers(filteredUsers);
+    
+                    setUsers(filteredUsers); // Cập nhật state với danh sách người dùng đã lọc
                 } catch (error) {
-                    console.error('Error fetching user data:', error);
-                    Alert.alert('Lỗi', 'Có lỗi xảy ra khi lấy thông tin người dùng.');
+                    console.error('Error fetching users:', error);
+                    Alert.alert('Lỗi', 'Có lỗi xảy ra khi lấy danh sách người dùng.');
                 } finally {
                     setLoading(false);
                 }
             }
         };
-
-        fetchUserInfo();
+    
+        fetchUsers();
     }, [user, navigation]);
+    
 
     const nextUser = () => {
         setCurrentUserIndex((prevIndex) => {

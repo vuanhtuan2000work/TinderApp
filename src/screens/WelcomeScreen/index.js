@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Linking, Image } from 'react-native';
+import { StyleSheet, Text, View, Linking, Image } from 'react-native';
 import { COLOR } from '../../styles/common';
 import ButtonLinearColor from '../../components/ButtonLinearColor';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +10,10 @@ const WelcomeScreen = () => {
     Linking.openURL(
       'https://policies.tinder.com/safety/intl/en/#:~:text=Meet%20for%20the%20first%20few,private%20location%2C%20end%20the%20date.&text=Tell%20a%20friend%20or%20family,and%20where%20you%27re%20going.'
     );
+  };
+
+  const handleAgreePress = () => {
+    navigation.navigate('AddInformationsRoute');
   };
 
   return (
@@ -35,7 +39,7 @@ const WelcomeScreen = () => {
         </View>
       ))}
       <View style={styles.buttonContainer}>
-        <ButtonLinearColor content="TÔI ĐỒNG Ý" onPress={() => navigation.navigate('TabBarRoute')} />
+        <ButtonLinearColor content="TÔI ĐỒNG Ý" onPress={handleAgreePress} />
       </View>
     </View>
   );
